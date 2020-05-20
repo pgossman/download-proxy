@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h2>Add a new torrent</h2>
+    <form method="post">
+        <div class="form-group">
+            <label for="magnet" class="sr-only">Magnet link</label>
+            <input type="text" name="magnet" class="form-control" placeholder="Magnet link">
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+    </form>
+    <hr>
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">.torrent file</label>
+            <input type="file" name="file" class="form-control-file">
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+    </form>
+</div>
+
+<hr>
+
+<div>
+    <h2>Active torrents</h2>
+    <small><a href="{{ transmission_web_url }}">Advanced control features</a></small>
+    {% if active %}
+    <table class="table">
+        <thead>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Progress</th>
+        </thead>
+        <tbody>
+            {% for t in active %}
+            <tr>
+                <td scope="row">{{ t.id }}</td>
+                <td>{{ t.name }}</td>
+                <td>{{ round(t.progress, 1) }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h4>No torrents downloading rn</h4>
+    {% endif %}
+</div>
+
+<hr>
+
+<div>
+    <h2>Completed torrents</h2>
+    {% if complete %}
+    <table class="table">
+        <thead>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            {% for t in complete %}
+            <tr>
+                <td scope="row">{{ t.id }}</td>
+                <td>{{ t.name }}</td>
+                <td><a href="/downloads/{{ t.id }}" class="btn btn-sm btn-success">Download</a></td>
+                <td>
+                    <form action="/downloads/{{ t.id }}/delete" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h4>No files downloaded yet</h4>
+    {% endif %}
+</div>
+{% endblock %}
