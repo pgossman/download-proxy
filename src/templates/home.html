@@ -31,6 +31,7 @@
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Progress</th>
+            <th scope="col"></th>
         </thead>
         <tbody>
             {% for t in active %}
@@ -38,6 +39,11 @@
                 <td scope="row">{{ t.id }}</td>
                 <td>{{ t.name }}</td>
                 <td>{{ round(t.progress, 1) }}%</td>
+                <td>
+                    <form action="/downloads/{{ t.id }}/delete" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
