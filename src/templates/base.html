@@ -15,5 +15,11 @@
             {% endfor %}
             {% block content %}{% endblock %}
         </div>
+
+        {% if self.footer() %}
+        <div class="container rounded">
+            {% block footer %}{% endblock %}
+        </div>
+        {% endif %}
     </body>
 </html>
