@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, flash, render_template, request, redirect, url_for
 from transmission_rpc import Client
@@ -92,11 +93,14 @@ def home_get():
     complete = [t for t in torrents if t.progress == 100.0]
     active = [t for t in torrents if t.progress != 100.0]
 
+    vpn_status = get_vpn_status()
+
     return render_template(
         "home.html",
         complete=complete,
         active=active,
         transmission_web_url=transmission_web_url(),
+        vpn_status=vpn_status,
         round=round,
     )
 
@@ -166,6 +170,17 @@ def add_torrent_via_file(client):
         pass
 
     return success
+
+
+def get_vpn_status():
+    result = {"success": False}
+    try:
+        r = requests.get("http://ip-api.com/json", timeout=1).json()
+        r["success"] = True
+    except requests.exceptions.RequestException:
+        pass
+
+    return result
 
 
 if __name__ == "__main__":

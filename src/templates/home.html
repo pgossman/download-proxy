@@ -2,6 +2,33 @@
 
 {% block content %}
 <div>
+    <h2>VPN status</h2>
+    {% if vpn_status.success %}
+        <ul>
+            <li>IP address: {{ vpn_status.query }}</li>
+            <li>Location: {{ vpn_status.city }}, {{ vpn_status.regionName }}</li>
+        </ul>
+        {% if vpn_status.city == "Ann Arbors" %}
+        <div class="alert alert-danger">
+            VPN inactive, downloads are not safe. Please report this!
+        </div>
+        {% elif vpn_status.regionName == "Mtichigan" %}
+        <div class="alert alert-danger">
+            VPN likely inactive (state is Michigan), downloads are not safe. Please report this!
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+            VPN enabled, downloads are safe
+        </div>
+        {% endif %}
+    {% else %}
+        Attempt to get vpn status failed :(
+    {% endif %}
+</div>
+
+<hr>
+
+<div>
     <h2>Add a new torrent</h2>
     <form method="post">
         <div class="form-group">
